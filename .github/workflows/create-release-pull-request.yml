@@ -19,3 +19,5 @@ jobs:
       - name: Create Release Pull Request
         run: |
           gh pr create --title "Release" --head main --base release/cli
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
