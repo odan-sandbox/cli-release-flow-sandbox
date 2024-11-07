@@ -8,8 +8,6 @@ jobs:
   create-release-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
@@ -17,7 +15,8 @@ jobs:
           private-key: ${{ secrets.ODAN_SANDBOX_BOT_PRIVATE_KEY }}
 
       - name: Create Release Pull Request
-        run: |
-          gh pr create --title "Release" --body "This is a pull request for release" --head main --base release/cli
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: release/cli
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
