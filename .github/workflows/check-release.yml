@@ -29,3 +29,37 @@ jobs:
 
       - run: |
           echo "Version of release branch: ${{ steps.release-version.outputs.content }}"
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "**Check Release**"
+
+      - name: Create or update comment
+        if: steps.main-version.outputs.content != steps.release-version.outputs.content
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Check Release**
+            If you merge this pull request, the version of the CLI tool will be released.
+            - Version: ${{ steps.main-version.outputs.content }}
+          edit-mode: replace
+
+      - name: Create or update comment
+        if: steps.main-version.outputs.content == steps.release-version.outputs.content
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Check Release**
+            You forgot to bump the new version.
+            You need to update the version in the `VERSION` file.
+          edit-mode: replace
+
+      - run: exit 1
+        if: steps.main-version.outputs.content == steps.release-version.outputs.content
