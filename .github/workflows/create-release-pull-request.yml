@@ -15,11 +15,18 @@ jobs:
           app-id: ${{ vars.ODAN_SANDBOX_BOT_APP_ID }}
           private-key: ${{ secrets.ODAN_SANDBOX_BOT_PRIVATE_KEY }}
 
+      - name: Check existing release pull request
+        id: existing-release-pr
+        run: |
+          PR_URL="$(gh pr list --state open --head main --base release/cli --json url --jq '.[].url')"
+          if [ -n "$PR_URL" ]; then
+            echo "result=true" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - name: Create Release Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: release/cli
-          title: Release new version
-          body: This is a pull request for release
+        if: ${{ steps.existing-release-pr.outputs.result != 'true' }}
+        run: gh pr create --title "Release new version" --body "This is a pull request for release" --head main --base release/cli
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
