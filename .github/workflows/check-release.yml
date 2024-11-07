@@ -1,0 +1,26 @@
+name: Check Release
+on:
+  pull_request:
+    branches:
+      - release/cli
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./actions/get-content
+        id: main-version
+        with:
+          path: VERSION
+
+      - uses: ./actions/get-content
+        id: release-version
+        with:
+          branch: release/cli
+          path: VERSION
+
+      - run: |
+          echo "Version: ${{ steps.main-version.outputs.content }}"
+
+      - run: |
+          echo "Version of release branch: ${{ steps.release-version.outputs.content }}"
