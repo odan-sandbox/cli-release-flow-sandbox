@@ -5,6 +5,8 @@ on:
       - release/cli
     types:
       - labeled
+      - unlabeled
+      - synchronize
 
 jobs:
   check:
