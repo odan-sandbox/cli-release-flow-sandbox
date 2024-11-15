@@ -23,7 +23,7 @@ jobs:
       - name: Get a level form label
         id: get-level
         run: |
-          LEVEL=$(gh pr view ${{ steps.get-pr-number.outputs.result }} --json "labels" | jq "[.labels.[].name]" | jq 'map(select(startswith("bump:"))).[]' -r | sed 's/bump://')
+          LEVEL=$(gh pr view ${{ steps.get-pr-number.outputs.result }} --json "labels" --jq '[.labels[] | .name] | map(select(startswith("bump:")))[]' | sed 's/bump://')
           echo "result=${LEVEL}" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
