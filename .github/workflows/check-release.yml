@@ -15,5 +15,9 @@ jobs:
         with:
           label_prefix: "bump:"
 
-      - run: exit 1
+      - uses: LouisBrunner/checks-action@v2.0.0
         if: ${{ steps.release-label.outputs.level == null }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Test XYZ
+          conclusion: action_required
