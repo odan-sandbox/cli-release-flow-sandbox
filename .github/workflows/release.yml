@@ -16,12 +16,16 @@ jobs:
         run: |
           PR_NUMBER=$(gh pr list --base release/cli --state merged --limit 1 --json number --jq '.[].number')
           echo "result=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Get a level form label
         id: get-level
         run: |
           LEVEL=$(gh pr view ${{ steps.get-pr-number.outputs.result }} --json "labels" | jq "[.labels.[].name]" | jq 'map(select(startswith("bump:"))).[]' -r | sed 's/bump://')
           echo "result=${LEVEL}" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - uses: actions/checkout@v4
       - uses: actions-ecosystem/action-get-latest-tag@v1
