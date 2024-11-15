@@ -37,6 +37,7 @@ jobs:
     needs: [check-label, find-comment]
     if: ${{ needs.check-label.outputs.level != null }}
     steps:
+      - uses: actions/checkout@v4
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
       - uses: actions-ecosystem/action-bump-semver@v1
