@@ -7,6 +7,7 @@ on:
       - labeled
       - unlabeled
       - synchronize
+      - opened
 
 jobs:
   check-label:
