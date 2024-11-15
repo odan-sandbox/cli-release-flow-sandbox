@@ -22,5 +22,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: Test XYZ
-          conclusion: action_required
-          action_url: "https://example.com"
+          conclusion: neutral
