@@ -55,7 +55,8 @@ jobs:
           body: |
             🤖 **Check Release**
             If you merge this pull request, the version of the CLI tool will be released.
-            - Version: ${{ steps.bump-semver.outputs.new_version }}
+            - Current Version: ${{ steps.get-latest-tag.outputs.tag }}
+            - New Version: ${{ steps.bump-semver.outputs.new_version }}
           edit-mode: replace
 
       - name: Update title of pull request
