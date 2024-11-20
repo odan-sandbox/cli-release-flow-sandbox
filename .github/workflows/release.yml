@@ -36,3 +36,11 @@ jobs:
       - uses: actions-ecosystem/action-push-tag@v1
         with:
           tag: ${{ steps.bump-semver.outputs.new_version }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
